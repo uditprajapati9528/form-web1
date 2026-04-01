@@ -1,94 +1,124 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Student Form</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Form</title>
 
-<!-- CAPTCHA -->
-<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
-<style>
-body {
-  font-family: Arial;
-  background: linear-gradient(135deg,#4facfe,#00f2fe);
-  margin: 0;
-}
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
 
-.container {
-  max-width: 400px;
-  margin: 20px auto;
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-}
+        .container {
+            max-width: 450px;
+            width: 90%;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            margin: 20px;
+        }
 
-input, select, textarea {
-  width: 100%;
-  padding: 10px;
-  margin: 8px 0;
-}
+        h2 { text-align: center; color: #333; margin-bottom: 20px; }
 
-button {
-  width: 100%;
-  padding: 12px;
-  background: blue;
-  color: white;
-  border: none;
-}
-</style>
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box; /* Zaroori hai width sahi rakhne ke liye */
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 15px;
+        }
+
+        button:disabled { background: #ccc; }
+        
+        .g-recaptcha { margin: 15px 0; }
+    </style>
 </head>
 
 <body>
 
 <div class="container">
-  <h2>Student Form</h2>
+    <h2>Student Form</h2>
 
-  <form action="https://script.google.com/macros/s/AKfycbykyD9byCkjFGor4GshUpa20QMW5gcJwCiqG2KBqzc8fuqCmU3gM2wXyJqwpbSbm0YF/exec" method="POST" target="hidden_iframe" onsubmit="submitted=true;">
+    <form id="studentForm" action="https://script.google.com/macros/s/AKfycbykyD9byCkjFGor4GshUpa20QMW5gcJwCiqG2KBqzc8fuqCmU3gM2wXyJqwpbSbm0YF/exec" method="POST" target="hidden_iframe">
 
-    <!-- Secret Key -->
-    <input type="hidden" name="key" value="MY_SECRET_123">
+        <input type="hidden" name="key" value="MY_SECRET_123">
 
-    <input name="name" placeholder="Full Name" required>
-    <input name="phone" placeholder="Phone" required>
-    <input name="email" placeholder="Email">
-    <textarea name="address" placeholder="Address"></textarea>
+        <input type="text" name="name" placeholder="Full Name" required>
+        <input type="number" name="phone" placeholder="Phone Number" required>
+        <input type="email" name="email" placeholder="Email Address">
+        
+        <textarea name="address" placeholder="Complete Address" rows="3"></textarea>
 
-    <input name="country" value="India">
-    <input name="state" placeholder="State">
-    <input name="district" placeholder="District">
-    <input name="village" placeholder="Village">
+        <input type="text" name="country" value="India" readonly>
+        <input type="text" name="state" placeholder="State">
+        <input type="text" name="district" placeholder="District">
+        <input type="text" name="village" placeholder="Village">
 
-    <select name="profession">
-      <option>Student</option>
-      <option>Job</option>
-      <option>Business</option>
-    </select>
+        <select name="profession">
+            <option value="Student">Student</option>
+            <option value="Job">Job</option>
+            <option value="Business">Business</option>
+        </select>
 
-    <!-- CAPTCHA -->
-    <div class="g-recaptcha" data-sitekey="6Lc25KAsAAAAAL-YJRwLim0x2pfwyBgXoKCwXFJl"></div>
+        <div class="g-recaptcha" data-sitekey="6Lc25KAsAAAAAL-YJRwLim0x2pfwyBgXoKCwXFJl"></div>
 
-    <button type="submit">Submit</button>
+        <button type="submit" id="submitBtn">Submit Form</button>
+    </form>
 
-  </form>
-
-  <!-- Hidden iframe -->
-  <iframe name="hidden_iframe" style="display:none;"></iframe>
-
+    <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
 </div>
 
 <script>
-var submitted = false;
+    const form = document.getElementById('studentForm');
+    const iframe = document.getElementById('hidden_iframe');
+    const btn = document.getElementById('submitBtn');
+    let isSubmitting = false;
 
-window.addEventListener("load", function() {
-  var iframe = document.querySelector("iframe");
+    form.addEventListener('submit', function(e) {
+        // Check if reCAPTCHA is filled
+        var response = grecaptcha.getResponse();
+        if(response.length == 0) {
+            alert("Please verify that you are not a robot.");
+            e.preventDefault();
+            return false;
+        }
 
-  iframe.onload = function() {
-    if(submitted){
-      window.location.href = "thankyou.html";
-    }
-  }
-});
+        isSubmitting = true;
+        btn.innerText = "Processing... Please wait";
+        btn.disabled = true;
+    });
+
+    iframe.addEventListener('load', function() {
+        if (isSubmitting) {
+            // Success hone par redirection
+            window.location.href = "thankyou.html";
+        }
+    });
 </script>
 
 </body>
