@@ -47,32 +47,32 @@
 </div>
 
 <script>
-    const form = document.getElementById('studentForm');
-    const btn = document.getElementById('submitBtn');
-    const iframe = document.getElementById('hidden_iframe');
-    let submissionStarted = false;
+const form = document.getElementById('studentForm');
+const btn = document.getElementById('submitBtn');
+const iframe = document.getElementById('hidden_iframe');
+let submissionStarted = false;
 
-    form.addEventListener('submit', function(e) {
-        // Captcha Check
-        var response = grecaptcha.getResponse();
-        if(response.length == 0) {
-            alert("Please verify the Captcha first!");
-            e.preventDefault();
-            return;
-        }
+form.addEventListener('submit', function(e) {
 
-        submissionStarted = true;
-        btn.innerText = "Sending Data...";
-        btn.disabled = true;
-    });
+    // CAPTCHA check
+    var response = grecaptcha.getResponse();
+    if(response.length == 0) {
+        alert("Please verify the Captcha first!");
+        e.preventDefault();
+        return;
+    }
 
-    // Jab iframe load ho jaye (matlab Google Script ne respond kar diya)
-    iframe.onload = function() {
-        if (submissionStarted) {
-            window.location.href = "thankyou.html";
-        }
-    };
+    submissionStarted = true;
+    btn.innerText = "Sending Data...";
+    btn.disabled = true;
+});
+
+// iframe load hone ke baad redirect
+iframe.onload = function() {
+    if (submissionStarted) {
+        window.location.href = "thankyou.html";
+    }
+};
 </script>
-
 </body>
 </html>
