@@ -3,36 +3,94 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<!-- ✅ CAPTCHA SCRIPT -->
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
 <style>
 body {
-  font-family: Arial;
-  background: linear-gradient(135deg,#4facfe,#00f2fe);
   margin: 0;
+  font-family: Arial;
+  button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  background: #ff7eb3;
+  color: white;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  position: relative;
+}
+
+.loading {
+  background: gray !important;
+}
+
+.spinner {
+  border: 3px solid #fff;
+  border-top: 3px solid transparent;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  animation: spin 1s linear infinite;
+  display: inline-block;
+  margin-left: 10px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+  background: linear-gradient(135deg,#667eea,#764ba2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
 .container {
+  width: 90%;
   max-width: 400px;
-  margin: auto;
-  background: white;
-  padding: 20px;
-  margin-top: 20px;
-  border-radius: 10px;
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(10px);
+  padding: 25px;
+  border-radius: 15px;
+  color: white;
+  animation: fade 0.8s ease;
 }
 
-input, select, textarea {
+h2 {
+  text-align: center;
+}
+
+.input-box {
+  margin: 12px 0;
+}
+
+input, textarea, select {
   width: 100%;
-  margin: 8px 0;
   padding: 10px;
+  border: none;
+  border-radius: 5px;
 }
 
 button {
   width: 100%;
   padding: 12px;
-  background: blue;
-  color: white;
   border: none;
+  background: #ff7eb3;
+  color: white;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #ff4e9b;
+}
+
+@keyframes fade {
+  from {opacity:0; transform: translateY(30px);}
+  to {opacity:1; transform: translateY(0);}
 }
 </style>
 </head>
@@ -40,42 +98,80 @@ button {
 <body>
 
 <div class="container">
-  <h2>Student Registration Form</h2>
+  <h2>Student Registration</h2>
 
   <form action="https://script.google.com/macros/s/AKfycby8nRyE03dlJCicjII7gEHJEe64pHdrO6WWSisVVPg8y3voeH4eZ2a1hsVoeJufsoqv6A/exec" method="POST" target="hidden_iframe" onsubmit="submitted=true;">
 
-    <input name="name" placeholder="Full Name" required>
-    <input name="phone" placeholder="Phone Number" required>
-    <input name="email" placeholder="Email">
+    <div class="input-box">
+      <input name="name" placeholder="Full Name" required>
+    </div>
 
-    <textarea name="address" placeholder="Address"></textarea>
+    <div class="input-box">
+      <input name="phone" placeholder="Phone Number" required>
+    </div>
 
-    <input name="country" value="India">
-    <input name="state" placeholder="State">
-    <input name="district" placeholder="District">
-    <input name="village" placeholder="Village / City">
+    <div class="input-box">
+      <input name="email" placeholder="Email">
+    </div>
 
-    <select name="profession">
-      <option>Student</option>
-      <option>Job</option>
-      <option>Business</option>
-      <option>Other</option>
-    </select>
+    <div class="input-box">
+      <textarea name="address" placeholder="Address"></textarea>
+    </div>
+
+    <div class="input-box">
+      <input name="state" placeholder="State">
+    </div>
+
+    <div class="input-box">
+      <input name="district" placeholder="District">
+    </div>
+
+    <div class="input-box">
+      <input name="village" placeholder="Village">
+    </div>
+
+    <div class="input-box">
+      <select name="profession">
+        <option>Student</option>
+        <option>Job</option>
+        <option>Business</option>
+      </select>
+    </div>
 
     <!-- 🔐 CAPTCHA -->
     <div class="g-recaptcha" data-sitekey="6Le7J6EsAAAAAAYcYb0MXA423JsbdTu5IyG7CK5o"></div>
 
-    <button type="submit">Submit</button>
+   <button id="submitBtn" type="submit">
+  <span id="btnText">Submit</span>
+</button>
 
   </form>
 
   <iframe name="hidden_iframe" style="display:none;"></iframe>
-
 </div>
 
 <script>
 var submitted = false;
 
+const form = document.querySelector("form");
+const btn = document.getElementById("submitBtn");
+const btnText = document.getElementById("btnText");
+
+form.addEventListener("submit", function(){
+
+  // 🔥 button animation start
+  btn.classList.add("loading");
+  btnText.innerText = "Processing...";
+
+  // spinner add
+  const spinner = document.createElement("span");
+  spinner.classList.add("spinner");
+  btn.appendChild(spinner);
+
+  submitted = true;
+});
+
+// redirect after submit
 document.querySelector("iframe").onload = function(){
   if(submitted){
     window.location.href = "thankyou.html";
