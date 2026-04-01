@@ -3,27 +3,34 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<script src="https://www.google.com/recaptcha/api.js" async defer></script>
-
 <style>
 body {
   font-family: Arial;
-  background: #f2f2f2;
+  background: linear-gradient(135deg,#4facfe,#00f2fe);
+  margin: 0;
 }
+
 .container {
   max-width: 400px;
   margin: auto;
   background: white;
   padding: 20px;
+  margin-top: 20px;
+  border-radius: 10px;
 }
-input, button {
+
+input, select, textarea {
   width: 100%;
-  margin: 10px 0;
+  margin: 8px 0;
   padding: 10px;
 }
+
 button {
+  width: 100%;
+  padding: 12px;
   background: blue;
   color: white;
+  border: none;
 }
 </style>
 </head>
@@ -31,14 +38,27 @@ button {
 <body>
 
 <div class="container">
-  <h2>Student Form</h2>
+  <h2>Student Registration Form</h2>
 
   <form action="https://script.google.com/macros/s/AKfycby8nRyE03dlJCicjII7gEHJEe64pHdrO6WWSisVVPg8y3voeH4eZ2a1hsVoeJufsoqv6A/exec" method="POST" target="hidden_iframe" onsubmit="submitted=true;">
 
-    <input name="name" placeholder="Name" required>
-    <input name="phone" placeholder="Phone" required>
+    <input name="name" placeholder="Full Name" required>
+    <input name="phone" placeholder="Phone Number" required>
+    <input name="email" placeholder="Email">
 
-    <div class="g-recaptcha" data-sitekey="6Le7J6EsAAAAAAYcYb0MXA423JsbdTu5IyG7CK5o"></div>
+    <textarea name="address" placeholder="Address"></textarea>
+
+    <input name="country" value="India">
+    <input name="state" placeholder="State">
+    <input name="district" placeholder="District">
+    <input name="village" placeholder="Village / City">
+
+    <select name="profession">
+      <option>Student</option>
+      <option>Job</option>
+      <option>Business</option>
+      <option>Other</option>
+    </select>
 
     <button type="submit">Submit</button>
 
