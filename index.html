@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Form</title>
+
+<style>
+body {
+  font-family: Arial;
+  background: linear-gradient(135deg,#4facfe,#00f2fe);
+  margin: 0;
+}
+
+.container {
+  max-width: 400px;
+  margin: 20px auto;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  background: blue;
+  color: white;
+  border: none;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <h2>Student Form</h2>
+
+  <form action="https://script.google.com/macros/s/AKfycbzp4RMIrilRtQ14A08Mw6_aaYTCBgEI3XUcB7gYMfllvdhYw_-Dtpw2tk7r4domVts7/exec" method="POST">
+
+    <input name="name" placeholder="Full Name" required>
+    <input name="phone" placeholder="Phone" required>
+    <input name="email" placeholder="Email">
+    <textarea name="address" placeholder="Address"></textarea>
+
+    <input name="country" value="India">
+    <input name="state" placeholder="State">
+    <input name="district" placeholder="District">
+    <input name="village" placeholder="Village">
+
+    <select name="profession">
+      <option>Student</option>
+      <option>Job</option>
+      <option>Business</option>
+    </select>
+
+    <button type="submit">Submit</button>
+
+  </form>
+</div>
+
+</body>
+</html>
