@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thank You</title>
+
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg,#667eea,#764ba2);
+  font-family: Arial;
+  overflow: hidden;
+}
+
+/* Box */
+.box {
+  text-align: center;
+  background: white;
+  padding: 40px;
+  border-radius: 15px;
+  animation: pop 0.6s ease;
+}
+
+/* Animation */
+@keyframes pop {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Checkmark */
+.checkmark {
+  font-size: 60px;
+  color: green;
+  animation: bounce 1s infinite alternate;
+}
+
+@keyframes bounce {
+  from { transform: translateY(0); }
+  to { transform: translateY(-10px); }
+}
+
+h1 {
+  margin: 10px 0;
+}
+
+/* Confetti */
+.confetti {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  top: 0;
+  animation: fall linear infinite;
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(100vh);
+  }
+}
+
+/* Button */
+.btn {
+  margin-top: 15px;
+  padding: 10px 20px;
+  border: none;
+  background: #667eea;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="box">
+  <div class="checkmark">✅</div>
+  <h1>Thank You!</h1>
+  <p>Your form has been submitted successfully 🎉</p>
+
+  <button class="btn" onclick="goBack()">Fill Again</button>
+</div>
+
+<script>
+// 🎊 Confetti
+for(let i=0;i<40;i++){
+  let confetti = document.createElement("div");
+  confetti.classList.add("confetti");
+
+  confetti.style.left = Math.random()*100 + "vw";
+  confetti.style.background = ["red","blue","yellow","green","orange"][Math.floor(Math.random()*5)];
+  confetti.style.animationDuration = (2 + Math.random()*3) + "s";
+
+  document.body.appendChild(confetti);
+}
+
+// 🔙 Back to form
+function goBack(){
+  window.location.href = "index.html";
+}
+
+// ⏳ Auto redirect after 5 sec
+setTimeout(() => {
+  window.location.href = "index.html";
+}, 5000);
+</script>
+
+</body>
+</html>

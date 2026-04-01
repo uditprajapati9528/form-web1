@@ -2,9 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Student Form</title>
+
+<!-- CAPTCHA -->
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
 <style>
 body {
@@ -34,7 +36,6 @@ button {
   color: white;
   border: none;
 }
-
 </style>
 </head>
 
@@ -43,8 +44,11 @@ button {
 <div class="container">
   <h2>Student Form</h2>
 
-  <form action="https://script.google.com/macros/s/AKfycbykyD9byCkjFGor4GshUpa20QMW5gcJwCiqG2KBqzc8fuqCmU3gM2wXyJqwpbSbm0YF/exec" method="POST" onsubmit="redirectPage()">
-<input type="hidden" name="key" value="MY_SECRET_123">
+  <form action="https://script.google.com/macros/s/AKfycbykyD9byCkjFGor4GshUpa20QMW5gcJwCiqG2KBqzc8fuqCmU3gM2wXyJqwpbSbm0YF/exec" method="POST" target="hidden_iframe" onsubmit="submitted=true;">
+
+    <!-- Secret Key -->
+    <input type="hidden" name="key" value="MY_SECRET_123">
+
     <input name="name" placeholder="Full Name" required>
     <input name="phone" placeholder="Phone" required>
     <input name="email" placeholder="Email">
@@ -60,17 +64,32 @@ button {
       <option>Job</option>
       <option>Business</option>
     </select>
-<div class="g-recaptcha" data-sitekey="6Lc25KAsAAAAAL-YJRwLim0x2pfwyBgXoKCwXFJl"></div>
+
+    <!-- CAPTCHA -->
+    <div class="g-recaptcha" data-sitekey="6Lc25KAsAAAAAL-YJRwLim0x2pfwyBgXoKCwXFJl"></div>
+
     <button type="submit">Submit</button>
 
   </form>
+
+  <!-- Hidden iframe -->
+  <iframe name="hidden_iframe" style="display:none;"></iframe>
+
 </div>
+
 <script>
-function redirectPage(){
-  setTimeout(() => {
-    window.location.href = "thankyou.html";
-  }, 500);
-}
+var submitted = false;
+
+window.addEventListener("load", function() {
+  var iframe = document.querySelector("iframe");
+
+  iframe.onload = function() {
+    if(submitted){
+      window.location.href = "thankyou.html";
+    }
+  }
+});
 </script>
+
 </body>
 </html>
