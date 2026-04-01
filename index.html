@@ -1,78 +1,128 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Registration Form</title>
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-    <style>
-        body { font-family: 'Arial', sans-serif; background: linear-gradient(135deg, #4facfe, #00f2fe); margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .container { max-width: 450px; width: 90%; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
-        h2 { text-align: center; color: #333; }
-        input, select, textarea { width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
-        button { width: 100%; padding: 12px; background: #007bff; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; font-weight: bold; margin-top: 10px; }
-        button:disabled { background: #aaaaaa; cursor: not-allowed; }
-        .g-recaptcha { margin: 10px 0; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Form</title>
+
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg,#4facfe,#00f2fe);
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 400px;
+  width: 90%;
+  background: white;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+h2 { text-align: center; color: #333; }
+
+input, select, textarea {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box; /* Layout fix */
+}
+
+button {
+  width: 100%;
+  padding: 15px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+button:disabled {
+  background: #ccc;
+}
+
+.g-recaptcha {
+  margin: 15px 0;
+}
+</style>
 </head>
+
 <body>
 
 <div class="container">
-    <h2>Student Form</h2>
-    <form id="studentForm" action="https://script.google.com/macros/s/AKfycbykyD9byCkjFGor4GshUpa20QMW5gcJwCiqG2KBqzc8fuqCmU3gM2wXyJqwpbSbm0YF/exec" method="POST" target="hidden_iframe">
-        
-        <input type="hidden" name="key" value="MY_SECRET_123">
-        <input type="text" name="name" placeholder="Full Name" required>
-        <input type="number" name="phone" placeholder="Phone Number" required>
-        <input type="email" name="email" placeholder="Email Address">
-        <textarea name="address" placeholder="Address"></textarea>
-        
-        <input type="text" name="country" value="India" readonly>
-        <input type="text" name="state" placeholder="State">
-        <input type="text" name="district" placeholder="District">
-        <input type="text" name="village" placeholder="Village">
+  <h2>Student Form</h2>
 
-        <select name="profession">
-            <option value="Student">Student</option>
-            <option value="Job">Job</option>
-            <option value="Business">Business</option>
-        </select>
+  <form id="studentForm" action="https://script.google.com/macros/s/AKfycbykyD9byCkjFGor4GshUpa20QMW5gcJwCiqG2KBqzc8fuqCmU3gM2wXyJqwpbSbm0YF/exec" method="POST" target="hidden_iframe">
 
-        <div class="g-recaptcha" data-sitekey="6Lc25KAsAAAAAL-YJRwLim0x2pfwyBgXoKCwXFJl"></div>
+    <input type="hidden" name="key" value="MY_SECRET_123">
 
-        <button type="submit" id="submitBtn">Submit Now</button>
-    </form>
+    <input type="text" name="name" placeholder="Full Name" required>
+    <input type="number" name="phone" placeholder="Phone" required>
+    <input type="email" name="email" placeholder="Email">
+    <textarea name="address" placeholder="Address"></textarea>
 
-    <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
+    <input type="text" name="country" value="India" readonly>
+    <input type="text" name="state" placeholder="State">
+    <input type="text" name="district" placeholder="District">
+    <input type="text" name="village" placeholder="Village">
+
+    <select name="profession">
+      <option value="Student">Student</option>
+      <option value="Job">Job</option>
+      <option value="Business">Business</option>
+    </select>
+
+    <div class="g-recaptcha" data-sitekey="6Le7J6EsAAAAAAYcYb0MXA423JsbdTu5IyG7CK5o"></div>
+
+    <button type="submit" id="submitBtn">Submit</button>
+
+  </form>
+
+  <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
+
 </div>
 
 <script>
-const form = document.getElementById('studentForm');
-const btn = document.getElementById('submitBtn');
-const iframe = document.getElementById('hidden_iframe');
-let submissionStarted = false;
+  const form = document.getElementById('studentForm');
+  const iframe = document.getElementById('hidden_iframe');
+  const btn = document.getElementById('submitBtn');
+  let isSubmitting = false;
 
-form.addEventListener('submit', function(e) {
-
-    // CAPTCHA check
-    var response = grecaptcha.getResponse();
-    if(response.length == 0) {
-        alert("Please verify the Captcha first!");
-        e.preventDefault();
-        return;
+  form.addEventListener('submit', function(e) {
+    // reCAPTCHA check
+    var captchaResponse = grecaptcha.getResponse();
+    if(captchaResponse.length == 0) {
+      alert("Please verify that you are not a robot.");
+      e.preventDefault();
+      return false;
     }
 
-    submissionStarted = true;
-    btn.innerText = "Sending Data...";
+    isSubmitting = true;
+    btn.innerText = "Sending...";
     btn.disabled = true;
-});
+  });
 
-// iframe load hone ke baad redirect
-iframe.onload = function() {
-    if (submissionStarted) {
-        window.location.href = "thankyou.html";
+  iframe.addEventListener('load', function() {
+    if (isSubmitting) {
+      // Form submit hone ke baad thankyou page par bhejega
+      window.location.href = "thankyou.html";
     }
-};
+  });
 </script>
+
 </body>
 </html>
