@@ -3,77 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Form</title>
-
+    <title>Student Registration Form</title>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #4facfe, #00f2fe);
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        .container {
-            max-width: 450px;
-            width: 90%;
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            margin: 20px;
-        }
-
-        h2 { text-align: center; color: #333; margin-bottom: 20px; }
-
-        input, select, textarea {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            box-sizing: border-box; /* Zaroori hai width sahi rakhne ke liye */
-        }
-
-        button {
-            width: 100%;
-            padding: 15px;
-            background: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background 0.3s;
-            margin-top: 15px;
-        }
-
-        button:disabled { background: #ccc; }
-        
-        .g-recaptcha { margin: 15px 0; }
+        body { font-family: 'Arial', sans-serif; background: linear-gradient(135deg, #4facfe, #00f2fe); margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .container { max-width: 450px; width: 90%; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
+        h2 { text-align: center; color: #333; }
+        input, select, textarea { width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background: #007bff; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; font-weight: bold; margin-top: 10px; }
+        button:disabled { background: #aaaaaa; cursor: not-allowed; }
+        .g-recaptcha { margin: 10px 0; }
     </style>
 </head>
-
 <body>
 
 <div class="container">
     <h2>Student Form</h2>
-
     <form id="studentForm" action="https://script.google.com/macros/s/AKfycbykyD9byCkjFGor4GshUpa20QMW5gcJwCiqG2KBqzc8fuqCmU3gM2wXyJqwpbSbm0YF/exec" method="POST" target="hidden_iframe">
-
+        
         <input type="hidden" name="key" value="MY_SECRET_123">
-
         <input type="text" name="name" placeholder="Full Name" required>
         <input type="number" name="phone" placeholder="Phone Number" required>
         <input type="email" name="email" placeholder="Email Address">
+        <textarea name="address" placeholder="Address"></textarea>
         
-        <textarea name="address" placeholder="Complete Address" rows="3"></textarea>
-
         <input type="text" name="country" value="India" readonly>
         <input type="text" name="state" placeholder="State">
         <input type="text" name="district" placeholder="District">
@@ -87,7 +40,7 @@
 
         <div class="g-recaptcha" data-sitekey="6Lc25KAsAAAAAL-YJRwLim0x2pfwyBgXoKCwXFJl"></div>
 
-        <button type="submit" id="submitBtn">Submit Form</button>
+        <button type="submit" id="submitBtn">Submit Now</button>
     </form>
 
     <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
@@ -95,30 +48,30 @@
 
 <script>
     const form = document.getElementById('studentForm');
-    const iframe = document.getElementById('hidden_iframe');
     const btn = document.getElementById('submitBtn');
-    let isSubmitting = false;
+    const iframe = document.getElementById('hidden_iframe');
+    let submissionStarted = false;
 
     form.addEventListener('submit', function(e) {
-        // Check if reCAPTCHA is filled
+        // Captcha Check
         var response = grecaptcha.getResponse();
         if(response.length == 0) {
-            alert("Please verify that you are not a robot.");
+            alert("Please verify the Captcha first!");
             e.preventDefault();
-            return false;
+            return;
         }
 
-        isSubmitting = true;
-        btn.innerText = "Processing... Please wait";
+        submissionStarted = true;
+        btn.innerText = "Sending Data...";
         btn.disabled = true;
     });
 
-    iframe.addEventListener('load', function() {
-        if (isSubmitting) {
-            // Success hone par redirection
+    // Jab iframe load ho jaye (matlab Google Script ne respond kar diya)
+    iframe.onload = function() {
+        if (submissionStarted) {
             window.location.href = "thankyou.html";
         }
-    });
+    };
 </script>
 
 </body>
